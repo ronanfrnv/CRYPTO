@@ -1,5 +1,7 @@
 # CRYPTO
 
+## Partie 1 : OpenSSL
+
 Chiffrer un ficher (avec encodage rc4 et mdp : motdepasse)
 ```
 openssl enc -rc4 -in texte.txt -out crypt.dat -pass pass:motdepasse
