@@ -46,3 +46,12 @@ En extraire la clé publique
 openssl rsa -pubout -in bastien.pem -out bastien_pub.pem
 ```
 
+Chiffre avec un clé publique
+```
+openssl rsautl -encrypt -in pour_bob.txt --pubin Bob.pub -out sortie_bob
+```
+
+Déchiffrer un document avec une clé privée (document qui avait été chiffré avec la clé publique)
+```
+openssl rsautl -decrypt -in fich_Bob_Pub -inkey Bob.pem -out sortie_bob
+```
