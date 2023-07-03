@@ -35,3 +35,13 @@ Hacher un fichier (pour hacher, on utilise la fonction dgst)
 ```
 openssl dgst -sha256 texte.txt > texte.hash
 ```
+
+Générer une clé asymétrique
+```
+openssl genrsa -out jspit.pem 2048
+```
+
+En extraire la clé publique 
+```
+openssl rsa -pubout -in bastien.pem -out bastien_pub.pem
+```
