@@ -45,3 +45,4 @@ En extraire la clé publique
 ```
 openssl rsa -pubout -in bastien.pem -out bastien_pub.pem
 ```
+
