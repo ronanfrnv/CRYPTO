@@ -1,59 +1,58 @@
-# CRYPTO
+Voici une reformulation des commandes pour utiliser OpenSSL dans différentes opérations de chiffrement et de hachage :
 
-## Partie 1 : OpenSSL
-
-Chiffrer un ficher (avec encodage rc4 et mdp : motdepasse)
+1. Chiffrer un fichier en utilisant l'algorithme RC4 avec un mot de passe :
 ```
 openssl enc -rc4 -in texte.txt -out crypt.dat -pass pass:motdepasse
 ```
 
-Déchiffrer ce même message (il faut savoir l'encodage et mdp utilisé) -> Le -d signifie décodage
+2. Déchiffrer un fichier chiffré avec l'algorithme RC4 en utilisant le même mot de passe :
 ```
-openssl enc -d -rc4 -in crypt.dat -k motdepasse
-```
-
-
-Chiffrer avec Blow Fish (en ajoutant de l'aléatoire = iv + une clé = K) Le iv doit faire 16 caractères
-```
-openssl enc -bf-cbc -in texte.txt -out clair1.bf_cbc -K 0123456789ABCDEF0123456789ABCDEF -iv 0123456789ABCDEF
+openssl enc -d -rc4 -in crypt.dat -out texte_dechiffre.txt -pass pass:motdepasse
 ```
 
-Déchiffrre ce même message
+3. Chiffrer un fichier en utilisant l'algorithme Blowfish avec un vecteur d'initialisation (IV) et une clé :
 ```
-openssl enc -bf-cbc -d -in clair1.bf_cbc -out test.txt -iv 0123456789ABCDEF -K 0123456789ABCDEF0123456789ABCDEF
-```
-
-Créer une chaine de 128 bits encodé en base 64
-```
-openssl rad -base64 128
+openssl enc -bf-cbc -in texte.txt -out chiffre.bf_cbc -K 0123456789ABCDEF0123456789ABCDEF -iv 0123456789ABCDEF
 ```
 
-Chiffre en aes-256-cbc et encode en base64 -> plus safe
+4. Déchiffrer un fichier chiffré avec l'algorithme Blowfish en utilisant le même IV et la même clé :
 ```
-openssl enc -aes-256-cbc -in text.txt -a  -out fich1.base64
+openssl enc -bf-cbc -d -in chiffre.bf_cbc -out texte_dechiffre.txt -iv 0123456789ABCDEF -K 0123456789ABCDEF0123456789ABCDEF
 ```
 
-Hacher un fichier (pour hacher, on utilise la fonction dgst)
+5. Générer une chaîne de 128 bits encodée en base64 :
+```
+openssl rand -base64 128
+```
+
+6. Chiffrer un fichier en utilisant l'algorithme AES-256-CBC et encoder le résultat en base64 :
+```
+openssl enc -aes-256-cbc -in texte.txt -a -out chiffre.base64
+```
+
+7. Hacher un fichier en utilisant l'algorithme de hachage SHA-256 :
 ```
 openssl dgst -sha256 texte.txt > texte.hash
 ```
 
-Générer une clé asymétrique
+8. Générer une paire de clés asymétriques :
 ```
-openssl genrsa -out jspit.pem 2048
-```
-
-En extraire la clé publique 
-```
-openssl rsa -pubout -in bastien.pem -out bastien_pub.pem
+openssl genrsa -out cle_privee.pem 2048
 ```
 
-Chiffre avec un clé publique
+9. Extraire la clé publique à partir de la clé privée :
 ```
-openssl rsautl -encrypt -in pour_bob.txt --pubin Bob.pub -out sortie_bob
+openssl rsa -pubout -in cle_privee.pem -out cle_publique.pem
 ```
 
-Déchiffrer un document avec une clé privée (document qui avait été chiffré avec la clé publique)
+10. Chiffrer un fichier en utilisant la clé publique :
 ```
-openssl rsautl -decrypt -in fich_Bob_Pub -inkey Bob.pem -out sortie_bob
+openssl rsautl -encrypt -in texte.txt -pubin -inkey cle_publique.pem -out chiffre_rsa.txt
 ```
+
+11. Déchiffrer un fichier chiffré avec la clé publique en utilisant la clé privée correspondante :
+```
+openssl rsautl -decrypt -in chiffre_rsa.txt -inkey cle_privee.pem -out texte_dechiffre.txt
+```
+
+Assurez-vous d'adapter ces commandes en fonction de votre système d'exploitation et des chemins d'accès aux fichiers nécessaires.
